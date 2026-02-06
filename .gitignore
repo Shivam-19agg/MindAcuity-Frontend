@@ -161,7 +161,7 @@ next-env.d.ts
 next.config.js
 
 # Node.js
-package-lock.json
-package.json
-postcss.config.mjs
+# package-lock.json
+# package.json
+# postcss.config.mjs
 
