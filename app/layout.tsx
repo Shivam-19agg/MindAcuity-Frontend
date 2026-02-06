@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Nunito_Sans, Varela_Round } from "next/font/google";
 import "./globals.css";
 

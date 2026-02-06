@@ -3,19 +3,19 @@
 /* MindAcuity "The Great Calm" Phase 2 - Premium Design System */
 :root {
   /* High-end Calmness Palette - Refined Emerald & Slate */
-  --primary: #059669;
-  /* Emerald 600 */
-  --primary-light: #34d399;
-  /* Emerald 400 */
-  --primary-deep: #064e3b;
-  /* Emerald 900 */
+  --primary: #2F9E7D;
+  /* Calm green */
+  --primary-light: #5AC8A6;
+  /* Soft mint */
+  --primary-deep: #1F7A62;
+  /* Deep green */
 
-  --secondary: #ecfdf5;
-  /* Emerald 50 */
-  --accent: #8b5cf6;
-  /* Violet 500 (Soft contrast) */
-  --background: #f8fafc;
-  /* Slate 50 - Cleaner than pure mint */
+  --secondary: #E9F7F1;
+  /* Soft green wash */
+  --accent: #7ED6A6;
+  /* Accent */
+  --background: #F7FCFA;
+  /* Calm background */
   --surface: #ffffff;
 
   --text-dark: #0f172a;
@@ -149,16 +149,17 @@ h4 {
   bottom: 2rem;
   right: 2rem;
   z-index: 50;
-  width: 64px;
-  height: 64px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--surface);
-  box-shadow: var(--shadow-float);
+  color: #2F9E7D;
+  box-shadow: 0 16px 40px -18px rgba(47, 158, 125, 0.55);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  border: 1px solid var(--secondary);
+  border: 1px solid rgba(79, 182, 226, 0.35);
   transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
@@ -167,7 +168,7 @@ h4 {
 }
 
 .zen-toggle.active {
-  background: var(--primary);
+  background: #2F9E7D;
   color: white;
 }
 

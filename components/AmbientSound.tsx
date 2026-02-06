@@ -8,17 +8,15 @@ export default function AmbientSound() {
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     useEffect(() => {
-        // Deferred initialization to avoid eager blockage
         const audio = new Audio("/rain-01.mp3");
         audio.loop = true;
         audio.volume = 0.2;
 
-        audio.addEventListener('canplaythrough', () => {
-            console.log("Rain audio loaded successfully");
+        audio.addEventListener("canplaythrough", () => {
             setIsLoaded(true);
         });
 
-        audio.addEventListener('error', (e) => {
+        audio.addEventListener("error", (e) => {
             console.error("Rain audio failed to load:", e);
         });
 
@@ -45,7 +43,6 @@ export default function AmbientSound() {
                 })
                 .catch((err) => {
                     console.error("Autoplay/Playback blocked:", err);
-                    // Feedback to user can be added here if needed
                 });
         }
     };

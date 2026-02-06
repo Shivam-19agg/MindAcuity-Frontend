@@ -3,12 +3,17 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function WaitlistForm() {
+interface WaitlistFormProps {
+    onSuccess?: () => void;
+}
+
+export default function WaitlistForm({ onSuccess }: WaitlistFormProps) {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
     const [message, setMessage] = useState("");
     const searchParams = useSearchParams();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
     useEffect(() => {
         if (searchParams.get("not_on_waitlist") === "true") {
@@ -29,7 +34,7 @@ export default function WaitlistForm() {
         setMessage("");
 
         try {
-            const response = await fetch("http://localhost:8000/waitlist/", {
+            const response = await fetch(`${apiUrl}/waitlist/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ name, email }),
@@ -45,6 +50,7 @@ export default function WaitlistForm() {
             setMessage("You're on the waitlist. Continue with Google to enter.");
             setName("");
             setEmail("");
+            onSuccess?.();
         } catch (error: any) {
             setStatus("error");
             setMessage(error.message);
@@ -52,24 +58,24 @@ export default function WaitlistForm() {
     };
 
     const handleGoogleLogin = () => {
-        window.location.href = "http://localhost:8000/auth/google";
+        window.location.href = `${apiUrl}/auth/google`;
     };
 
     return (
-        <div className="flex flex-col gap-8 w-full max-w-2xl mx-auto transition-all duration-500 ease-out"
+        <div className="flex flex-col gap-6 w-full max-w-xl mx-auto transition-all duration-500 ease-out"
             style={{
-                background: 'rgba(255, 255, 255, 0.65)',
-                backdropFilter: 'blur(40px)', // High-end glass
-                WebkitBackdropFilter: 'blur(40px)',
-                borderRadius: '32px',
-                boxShadow: '0 25px 80px -20px rgba(5, 150, 105, 0.15), 0 0 0 1px rgba(255,255,255,0.6) inset', // Soft emerald shadow + shine border
-                padding: '3rem 2.5rem', // Refined padding
+                background: 'rgba(255, 255, 255, 0.75)',
+                backdropFilter: 'blur(36px)',
+                WebkitBackdropFilter: 'blur(36px)',
+                borderRadius: '28px',
+                boxShadow: '0 20px 60px -20px rgba(47, 158, 125, 0.25), 0 0 0 1px rgba(255,255,255,0.6) inset',
+                padding: '2.5rem 2.25rem',
             }}>
 
             {/* Header */}
-            <div className="text-center mb-8">
-                <h3 className="text-4xl font-extrabold text-slate-800 tracking-tight font-[family-name:var(--font-varela)] mb-3">
-                    Reserve Your Sanctuary
+            <div className="text-center mb-6">
+                <h3 className="text-3xl font-extrabold text-slate-800 tracking-tight font-[family-name:var(--font-varela)] mb-3">
+                    Reserve Your Space
                 </h3>
                 <p className="text-slate-500 text-lg font-medium font-[family-name:var(--font-nunito)]">
                     Join early access to MindAcuity.
@@ -79,8 +85,8 @@ export default function WaitlistForm() {
             <form onSubmit={handleJoinWaitlist} className="space-y-6 flex flex-col">
                 {/* Full Name Input */}
                 <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Legal Name</label>
-                    <div className="flex items-center gap-4 bg-white/80 border-2 border-slate-100 rounded-2xl focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all px-6 py-1 shadow-sm hover:border-emerald-200 group">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Full Name</label>
+                    <div className="flex items-center gap-4 bg-white/80 border-2 border-slate-100 rounded-2xl focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all px-5 py-1 shadow-sm hover:border-emerald-200 group">
                         <div className="text-slate-400 group-focus-within:text-emerald-500 transition-colors">
                             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
                         </div>
@@ -90,7 +96,7 @@ export default function WaitlistForm() {
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Full Name"
                             required
-                            className="w-full py-4 bg-transparent text-slate-800 placeholder:text-slate-400 outline-none font-medium text-lg font-sans"
+                            className="w-full py-3.5 bg-transparent text-slate-800 placeholder:text-slate-400 outline-none font-medium text-lg font-sans"
                             disabled={status === "loading" || status === "success"}
                         />
                     </div>
@@ -98,8 +104,8 @@ export default function WaitlistForm() {
 
                 {/* Email Input */}
                 <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Primary Endpoint</label>
-                    <div className="flex items-center gap-4 bg-white/80 border-2 border-slate-100 rounded-2xl focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all px-6 py-1 shadow-sm hover:border-emerald-200 group">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">Email Address</label>
+                    <div className="flex items-center gap-4 bg-white/80 border-2 border-slate-100 rounded-2xl focus-within:border-emerald-400 focus-within:ring-4 focus-within:ring-emerald-400/10 transition-all px-5 py-1 shadow-sm hover:border-emerald-200 group">
                         <div className="text-slate-400 group-focus-within:text-emerald-500 transition-colors">
                             <svg className="h-6 w-6 " fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                         </div>
@@ -109,7 +115,7 @@ export default function WaitlistForm() {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Email Address"
                             required
-                            className="w-full py-4 bg-transparent text-slate-800 placeholder:text-slate-400 outline-none font-medium text-lg font-sans"
+                            className="w-full py-3.5 bg-transparent text-slate-800 placeholder:text-slate-400 outline-none font-medium text-lg font-sans"
                             disabled={status === "loading" || status === "success"}
                         />
                     </div>
@@ -119,9 +125,9 @@ export default function WaitlistForm() {
                 <button
                     type="submit"
                     disabled={status === "loading" || status === "success"}
-                    className="w-full py-5 rounded-2xl text-white font-bold text-xl transition-all shadow-[0_10px_30px_-10px_rgba(5,150,105,0.4)] hover:shadow-[0_20px_40px_-10px_rgba(5,150,105,0.5)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] relative overflow-hidden group cursor-pointer"
+                    className="w-full py-4 rounded-2xl text-white font-bold text-lg transition-all shadow-[0_10px_30px_-10px_rgba(47,158,125,0.45)] hover:shadow-[0_20px_40px_-10px_rgba(47,158,125,0.6)] hover:-translate-y-1 active:translate-y-0 active:scale-[0.98] relative overflow-hidden group cursor-pointer"
                     style={{
-                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                        background: 'linear-gradient(135deg, #2F9E7D 0%, #7ED6A6 100%)',
                     }}
                 >
                     <span className="relative z-10 flex items-center justify-center gap-3">
@@ -148,7 +154,7 @@ export default function WaitlistForm() {
             </form>
 
             {/* Divider */}
-            <div className="relative flex py-4 items-center">
+            <div className="relative flex py-3 items-center">
                 <div className="flex-grow border-t border-slate-200"></div>
                 <span className="flex-shrink-0 mx-4 text-slate-400 text-xs font-bold tracking-widest uppercase bg-transparent px-2">Or continue with</span>
                 <div className="flex-grow border-t border-slate-200"></div>
@@ -165,7 +171,7 @@ export default function WaitlistForm() {
                     <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.26.81-.58z" fill="#FBBC05" />
                     <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
                 </svg>
-                <span className="group-hover:text-slate-900 transition-colors">Google</span>
+                <span className="group-hover:text-slate-900 transition-colors">Continue with Google</span>
             </button>
         </div >
     );

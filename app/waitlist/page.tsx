@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
+import Link from "next/link";
+import { useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import WaitlistForm from "@/components/WaitlistForm";
 import GoogleButton from "@/components/GoogleButton";
@@ -10,16 +11,8 @@ import AmbientSound from "@/components/AmbientSound";
 function WaitlistContent() {
     const searchParams = useSearchParams();
     const [showSuccess, setShowSuccess] = useState(false);
-    const [notOnWaitlist, setNotOnWaitlist] = useState(false);
-    const [userEmail, setUserEmail] = useState("");
-
-    useEffect(() => {
-        // Check if user was redirected because they're not on waitlist
-        if (searchParams.get("not_on_waitlist") === "true") {
-            setNotOnWaitlist(true);
-            setUserEmail(searchParams.get("email") || "");
-        }
-    }, [searchParams]);
+    const notOnWaitlist = searchParams.get("not_on_waitlist") === "true";
+    const userEmail = searchParams.get("email") || "";
 
     return (
         <main className="relative min-h-screen overflow-hidden flex items-center justify-center px-6">
@@ -28,11 +21,11 @@ function WaitlistContent() {
             <div className="relative z-10 w-full max-w-lg">
                 <div className="card text-center">
                     {/* Header */}
-                    <a href="/" className="inline-block mb-6">
+                    <Link href="/" className="inline-block mb-6">
                         <h1 className="text-3xl font-bold">
                             <span className="text-primary">Mind</span>Acuity
                         </h1>
-                    </a>
+                    </Link>
 
                     {notOnWaitlist ? (
                         <>
